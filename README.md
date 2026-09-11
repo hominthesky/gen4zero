@@ -4,6 +4,10 @@
 
 An open, browser-native generative instrument for shaping visual systems from seed to form.
 
+[Open Gen4Zero](https://zzao.im/gen4zero/) · [Share feedback](https://github.com/hominthesky/gen4zero/issues/new/choose)
+
+The launch is available at the project URL above. The planned canonical origin, `gen4zero.zzao.im`, is awaiting DNS setup; it is not yet advertised as a working address.
+
 ![Gen4Zero social preview](./og.png)
 
 ## What it includes

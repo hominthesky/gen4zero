@@ -1,6 +1,6 @@
 # CR-20260911-01｜Gen4Zero brand and first public release
 
-- **Status:** Preview ready; deployment pending
+- **Status:** Deployed and smoke-verified at project URL; custom domain pending DNS coordination
 - **Owner:** Z4Zero
 - **Risk:** R3
 - **Human approval:** The product owner explicitly requested publication according to the agreed Gen4Zero brand plan on 2026-09-11. This approval covers creating and publishing the public `hominthesky/gen4zero` repository and configuring `gen4zero.zzao.im`; it does not authorize changes to unrelated repositories, DNS records, accounts, or services.
@@ -41,7 +41,7 @@ Evidence:
 - Social card is a visually inspected 1200 × 630 PNG with exact title, tagline, and descriptor.
 - The local browser preview loads without console warnings or errors. System selection, seed input, Layer B, TikTok preset, safe zone, and pause/play were exercised successfully in the responsive interface.
 - Isolated Chrome verified six nonblank renderers, exact 1080 × 1920 PNG, decodable 1080 × 1920 WebM, Gallery persistence and reload, JSON/URL recipe round-trips, and zero page errors. Desktop and 390 px screenshots were inspected; no horizontal overflow occurred. This does not establish other-browser parity or pixel-level regression coverage.
-- Public repository created. Pending: final committed Pages deployment, custom HTTPS origin, live assets, and feedback links.
+- Public repository and Pages deployment succeeded. Real-browser acceptance also passed at `https://zzao.im/gen4zero/`. The custom HTTPS origin remains pending DNS coordination.
 
 Pre-publication review found gaps in the original gate. The workflow now fetches history, isolates PR concurrency from production, grants write permissions only to deployment, and publishes the artifact that verification produced. Behavioral tests execute all six renderers and exercise bounded recipe normalization and non-destructive storage migration. Prototype-property enum names are excluded, false-like strings cannot enable layers, and storage quota failure retains access to legacy works.
 
@@ -55,4 +55,6 @@ Stop after two failures of the same method, any need to alter unrelated DNS, amb
 
 ## Release evidence
 
-Pending verified commit, deployment URL, workflow result, custom-domain check, and operation-log completion.
+Commit `851524239bb99ee8989114e8310f8b63fe3fe995` is live at [the project URL](https://zzao.im/gen4zero/), with [successful verification and deployment](https://github.com/hominthesky/gen4zero/actions/runs/34600216855). The first deployment failed only because Pages was not yet enabled; a targeted rerun reused the verified artifact successfully. Live `app.js` matches the source SHA-256 recorded in `OPERATIONS.md`.
+
+The canonical domain is deliberately not bound to avoid redirecting to an unresolved host. Domain attachment, its scoped DNS CNAME, and certificate checks are still required. Bootstrap protection settings and the documentation-only closeout commit are recorded in the [v0.1.0 release evidence](https://github.com/hominthesky/gen4zero/releases/tag/v0.1.0) once applied. No browser-pixel regression, unattended issue agent, or cross-browser guarantee is claimed.

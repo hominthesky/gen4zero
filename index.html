@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0c0b" />
+    <meta name="description" content="Z4Zero Generative Studio — 在浏览器里调制、预览、保存与导出生成式视觉。" />
+    <meta property="og:title" content="Z4Zero / Generative Studio" />
+    <meta property="og:description" content="Make living visual systems." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="./og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Z4Zero / Generative Studio" />
+    <meta name="twitter:description" content="Make living visual systems." />
+    <meta name="twitter:image" content="./og.png" />
+    <title>Z4Zero / Generative Studio</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#studio" aria-label="Z4Zero Generative Studio home">
+          <span class="brand-mark" aria-hidden="true">Z<span>4</span></span>
+          <span class="brand-name">Generative Studio</span>
+        </a>
+        <nav class="view-nav" aria-label="Primary navigation">
+          <button class="nav-item is-active" type="button" data-view="studio">Studio</button>
+          <button class="nav-item" type="button" data-view="gallery">Gallery <sup id="gallery-count">08</sup></button>
+        </nav>
+        <div class="topbar-actions">
+          <span class="system-status"><i></i> Browser-native</span>
+          <button class="icon-button" type="button" id="about-open" aria-label="Open about panel" title="About">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 10.7v6M12 7.3v.2"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="studio-layout" id="studio-view">
+        <aside class="left-rail" aria-label="Generative system controls">
+          <section class="panel-section pattern-section">
+            <div class="section-heading"><span>01 / System</span><span id="pattern-position">1 of 6</span></div>
+            <div class="pattern-list">
+              <button class="pattern-card is-active" type="button" data-pattern="flow"><span class="pattern-thumb thumb-flow" aria-hidden="true"></span><span><strong>Vector Field</strong><small>Noise-driven traces</small></span><b>01</b></button>
+              <button class="pattern-card" type="button" data-pattern="orbit"><span class="pattern-thumb thumb-orbit" aria-hidden="true"></span><span><strong>Orbital Bloom</strong><small>Parametric petals</small></span><b>02</b></button>
+              <button class="pattern-card" type="button" data-pattern="cell"><span class="pattern-thumb thumb-cell" aria-hidden="true"></span><span><strong>Cellular Veil</strong><small>Living topology</small></span><b>03</b></button>
+              <button class="pattern-card" type="button" data-pattern="grid"><span class="pattern-thumb thumb-grid" aria-hidden="true"></span><span><strong>Recursive Grid</strong><small>Rule-based modules</small></span><b>04</b></button>
+              <button class="pattern-card" type="button" data-pattern="moire"><span class="pattern-thumb thumb-moire" aria-hidden="true"></span><span><strong>Moiré Signal</strong><small>Interference waves</small></span><b>05</b></button>
+              <button class="pattern-card" type="button" data-pattern="loom"><span class="pattern-thumb thumb-loom" aria-hidden="true"></span><span><strong>Particle Loom</strong><small>Woven trajectories</small></span><b>06</b></button>
+            </div>
+          </section>
+
+          <section class="panel-section control-section">
+            <div class="section-heading"><span>02 / Character</span><button class="text-button" type="button" id="reset-controls">Reset</button></div>
+            <label class="range-control"><span><b>Density</b><output for="density">64</output></span><input id="density" type="range" min="20" max="120" value="64" /></label>
+            <label class="range-control"><span><b>Complexity</b><output for="complexity">0.58</output></span><input id="complexity" type="range" min="0" max="1" step="0.01" value="0.58" /></label>
+            <label class="range-control"><span><b>Motion</b><output for="motion">0.42</output></span><input id="motion" type="range" min="0" max="1" step="0.01" value="0.42" /></label>
+            <label class="range-control"><span><b>Continuity</b><output for="continuity">0.76</output></span><input id="continuity" type="range" min="0.12" max="1" step="0.01" value="0.76" /></label>
+          </section>
+
+          <section class="panel-section control-section">
+            <div class="section-heading"><span>03 / Material</span></div>
+            <label class="range-control"><span><b>Scale</b><output for="scale">0.62</output></span><input id="scale" type="range" min="0.2" max="1" step="0.01" value="0.62" /></label>
+            <label class="range-control"><span><b>Weight</b><output for="weight">1.10</output></span><input id="weight" type="range" min="0.4" max="3" step="0.05" value="1.1" /></label>
+            <label class="range-control"><span><b>Grain</b><output for="grain">0.16</output></span><input id="grain" type="range" min="0" max="0.55" step="0.01" value="0.16" /></label>
+          </section>
+
+          <section class="panel-section palette-section">
+            <div class="section-heading"><span>04 / Palette</span><span id="palette-name">Signal</span></div>
+            <div class="palette-grid" role="radiogroup" aria-label="Color palette">
+              <button class="palette-button is-active" type="button" data-palette="signal" role="radio" aria-checked="true" aria-label="Signal palette"><i style="--swatch:#11110f"></i><i style="--swatch:#e9ff5a"></i><i style="--swatch:#ff5a46"></i></button>
+              <button class="palette-button" type="button" data-palette="cobalt" role="radio" aria-checked="false" aria-label="Cobalt palette"><i style="--swatch:#091429"></i><i style="--swatch:#5de0ff"></i><i style="--swatch:#846bff"></i></button>
+              <button class="palette-button" type="button" data-palette="paper" role="radio" aria-checked="false" aria-label="Paper palette"><i style="--swatch:#e9e3d6"></i><i style="--swatch:#272422"></i><i style="--swatch:#e84b32"></i></button>
+              <button class="palette-button" type="button" data-palette="infrared" role="radio" aria-checked="false" aria-label="Infrared palette"><i style="--swatch:#190d10"></i><i style="--swatch:#ff3158"></i><i style="--swatch:#ffb650"></i></button>
+              <button class="palette-button" type="button" data-palette="mineral" role="radio" aria-checked="false" aria-label="Mineral palette"><i style="--swatch:#071a18"></i><i style="--swatch:#77efcf"></i><i style="--swatch:#dbc9a1"></i></button>
+              <button class="palette-button" type="button" data-palette="mono" role="radio" aria-checked="false" aria-label="Monochrome palette"><i style="--swatch:#111111"></i><i style="--swatch:#f3f0e7"></i><i style="--swatch:#76766f"></i></button>
+            </div>
+          </section>
+        </aside>
+
+        <section class="stage-column" aria-label="Artwork preview">
+          <div class="stage-toolbar">
+            <div><span class="eyebrow">Live canvas</span><h1 id="artwork-title">Vector Field <em>/ VF–01</em></h1></div>
+            <div class="canvas-meta"><span id="canvas-size-label">1600 × 900</span><span id="fps-label">60 FPS</span></div>
+          </div>
+          <div class="canvas-zone">
+            <div class="canvas-frame" id="canvas-frame">
+              <canvas id="art-canvas" width="1600" height="900" aria-label="Generative artwork preview"></canvas>
+              <div class="safe-zone" id="safe-zone" hidden aria-hidden="true"></div>
+              <div class="canvas-index" aria-hidden="true"><span>Z4Z / <i id="edition-index">001</i></span><span id="seed-stamp">SEED 284731</span></div>
+              <div class="recording-badge" id="recording-badge" hidden><i></i><span>REC 00:05</span></div>
+            </div>
+          </div>
+          <div class="transport" aria-label="Playback and seed controls">
+            <button class="transport-button" id="play-toggle" type="button" aria-label="Pause animation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6v12M16 6v12"></path></svg></button>
+            <label class="seed-field"><span>Seed</span><input id="seed-input" type="number" min="1" max="999999999" value="284731" inputmode="numeric" aria-label="Artwork seed" /></label>
+            <button class="icon-button reroll-button" id="randomize-seed" type="button" aria-label="Generate a new random seed" title="New seed"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"></path><path d="M6.1 9A7 7 0 0 1 18.7 7.5L20 12M4 12l1.3 4.5A7 7 0 0 0 17.9 15"></path></svg></button>
+            <div class="transport-note">SPACE <span>play / pause</span> · R <span>new seed</span></div>
+          </div>
+        </section>
+
+        <aside class="right-rail" aria-label="Composition and export controls">
+          <section class="panel-section composition-section">
+            <div class="section-heading"><span>05 / Composition</span><label class="switch"><input id="layer-toggle" type="checkbox" /><span></span><b>Layer B</b></label></div>
+            <label class="select-control"><span>System</span><select id="layer-pattern" disabled><option value="orbit">Orbital Bloom</option><option value="cell">Cellular Veil</option><option value="grid">Recursive Grid</option><option value="moire">Moiré Signal</option><option value="loom">Particle Loom</option><option value="flow">Vector Field</option></select></label>
+            <label class="range-control compact-control"><span><b>Layer mix</b><output for="layerOpacity">0.38</output></span><input id="layerOpacity" type="range" min="0.05" max="0.9" step="0.01" value="0.38" disabled /></label>
+            <label class="select-control"><span>Blend</span><select id="blend-mode" disabled><option value="screen">Screen</option><option value="source-over">Normal</option><option value="multiply">Multiply</option><option value="difference">Difference</option><option value="overlay">Overlay</option></select></label>
+          </section>
+
+          <section class="panel-section format-section">
+            <div class="section-heading"><span>06 / Canvas</span><label class="safe-toggle"><input id="safe-toggle" type="checkbox" /> Safe zone</label></div>
+            <label class="select-control"><span>Use preset</span><select id="output-preset"><option value="hero">Web hero · 16:9</option><option value="fullhd">Full HD · 16:9</option><option value="tiktok">TikTok / Reel · 9:16</option><option value="portrait">Feed portrait · 4:5</option><option value="square">Square post · 1:1</option><option value="og">Social card · 1.91:1</option><option value="poster">A-series poster · √2</option></select></label>
+            <div class="preset-summary"><span>Web hero</span><strong>1600 × 900</strong><small>Responsive landscape · 16:9</small></div>
+          </section>
+
+          <section class="panel-section export-section">
+            <div class="section-heading"><span>07 / Output</span><span>Browser-rendered</span></div>
+            <button class="primary-button" type="button" id="export-png">Export PNG<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"></path></svg></button>
+            <button class="secondary-button" type="button" id="record-video">Record 5s clip <span>WEBM</span></button>
+            <button class="secondary-button" type="button" id="save-gallery">Save to my gallery <span>LOCAL</span></button>
+            <div class="utility-row"><button type="button" id="copy-link">Copy recipe link</button><button type="button" id="export-recipe">Export JSON</button></div>
+            <div class="export-meta"><span>PNG / WEBM</span><span>sRGB</span><span id="export-size">1600 × 900</span></div>
+          </section>
+
+          <section class="panel-section philosophy-section">
+            <p>每个结果都来自一套可复现的规则，而不是一张不可解释的图片。</p>
+            <span>Z4Zero / notes, objects &amp; experiments</span>
+          </section>
+        </aside>
+      </main>
+
+      <main class="gallery-view" id="gallery-view" hidden>
+        <header class="gallery-header"><span class="eyebrow">Curated outputs / 2026</span><h1>Selected systems,<br />held at one moment.</h1><p>算法提供可能性，选择把它变成作品。公开策展与只存在于这台设备上的个人收藏，被刻意分开。</p></header>
+        <section class="gallery-section" aria-labelledby="curated-title"><div class="gallery-section-heading"><h2 id="curated-title">Curated selection</h2><span>08 works</span></div><div class="gallery-grid" id="curated-grid"></div></section>
+        <section class="gallery-section local-gallery-section" aria-labelledby="local-title"><div class="gallery-section-heading"><h2 id="local-title">My device</h2><span id="local-count">0 saved</span></div><div class="gallery-grid" id="local-grid"><div class="empty-gallery"><span>Nothing held yet.</span><p>Return to Studio and save a frame you want to revisit.</p></div></div></section>
+      </main>
+    </div>
+
+    <dialog class="about-dialog" id="about-dialog">
+      <button class="dialog-close" type="button" id="about-close" aria-label="Close about panel">×</button>
+      <span class="eyebrow">About this instrument</span><h2>Make systems.<br />Then make choices.</h2>
+      <p>Generative Studio 是 Z4Zero 的浏览器原生创作工具。它把流场、参数曲线、拓扑、递归网格、干涉纹与粒子轨迹变成可控制、可组合、可复现的视觉系统。</p>
+      <p>相同的 seed 与参数会回到相同的起点。PNG、短视频、配方文件都在你的浏览器里生成；作品不会上传到服务器。</p>
+      <div class="dialog-note"><span>Privacy</span><strong>Local-first. No account. No upload.</strong></div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <noscript>This studio needs JavaScript to render generative artwork.</noscript>
+  </body>
+</html>

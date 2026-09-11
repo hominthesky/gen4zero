@@ -37,15 +37,17 @@ The working instrument already contains six deterministic systems, layered compo
 
 Evidence:
 
-- `npm run verify:release` passes locally: five tests, JavaScript syntax, metadata/origin, documentation links, secret scan, change policy, and a seven-file allowlisted build.
+- `npm run verify:release` passes locally: eleven tests, JavaScript syntax, metadata/origin, documentation links, secret scan, change policy, and a seven-file allowlisted build.
 - Social card is a visually inspected 1200 × 630 PNG with exact title, tagline, and descriptor.
 - The local browser preview loads without console warnings or errors. System selection, seed input, Layer B, TikTok preset, safe zone, and pause/play were exercised successfully in the responsive interface.
-- PNG/WebM and complete Gallery persistence remain release/live checks; their underlying rendering behavior was not changed beyond public filenames and the non-destructive storage-key migration.
-- Pending: public repository, Pages deployment, custom HTTPS origin, metadata, assets, and feedback links.
+- Isolated Chrome verified six nonblank renderers, exact 1080 × 1920 PNG, decodable 1080 × 1920 WebM, Gallery persistence and reload, JSON/URL recipe round-trips, and zero page errors. Desktop and 390 px screenshots were inspected; no horizontal overflow occurred. This does not establish other-browser parity or pixel-level regression coverage.
+- Public repository created. Pending: final committed Pages deployment, custom HTTPS origin, live assets, and feedback links.
 
 Pre-publication review found gaps in the original gate. The workflow now fetches history, isolates PR concurrency from production, grants write permissions only to deployment, and publishes the artifact that verification produced. Behavioral tests execute all six renderers and exercise bounded recipe normalization and non-destructive storage migration. Prototype-property enum names are excluded, false-like strings cannot enable layers, and storage quota failure retains access to legacy works.
 
 Results will be updated only after execution.
+
+Final acceptance preparation added an optional isolated-browser smoke script, clarified full-resolution PNG versus preview-resolution WebM, corrected compact-mark alignment, and made unsupported/failed recordings fail visibly and release their stream resources. These changes are included in the R3 launch scope and require rerunning the browser and release gates. Video timing remains approximate and hardware-dependent; the first version does not promise seamless loops or MP4.
 
 ## Stop conditions and rollback
 

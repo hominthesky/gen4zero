@@ -53,7 +53,7 @@ npm run verify:release
 
 ## Publish
 
-The included workflow deploys the repository root to GitHub Pages on pushes to `main`. Before the first run, choose **GitHub Actions** as the repository's Pages source.
+The included workflow verifies and deploys only the seven-file `dist/` allowlist to GitHub Pages on pushes to `main`. Before the first run, choose **GitHub Actions** as the repository's Pages source. Repository documents and tests are not in the website artifact.
 
 Recommended URL strategy:
 
@@ -62,7 +62,13 @@ Recommended URL strategy:
 3. Configure `gen4zero.zzao.im` as the repository's custom domain.
 4. Point the DNS `CNAME` for `gen4zero` to `hominthesky.github.io` and enforce HTTPS after GitHub issues the certificate.
 
-The repository includes a `CNAME` file so the intended public origin travels with the release artifact.
+The repository includes a `CNAME` file as an origin contract for verification. With an Actions-based deployment, GitHub ignores that file: the custom domain must also be set in Pages settings before pointing DNS at GitHub. See [GitHub's custom-domain guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site).
+
+## Browser acceptance and current limits
+
+PNG uses the exact selected dimensions. WebM records the preview canvas (capped near 2.2 megapixels), with its actual dimensions shown in the output panel. Clips are approximately five seconds, are not seamless loops, and animation speed/recording quality depend on browser performance. MP4 and mobile-browser parity are not promised in v0.1.
+
+For repeatable real-browser acceptance, install Playwright in your development environment and run `node scripts/browser-smoke.mjs` against the local server. `SITE_URL` selects another deployed origin; `PLAYWRIGHT_MODULE` and `CHROME_PATH` optionally select existing local installations. The script uses an isolated browser context and temporary evidence files, checking renderers, PNG dimensions, decodable WebM, Gallery persistence, recipe round-trips, page errors, and narrow-screen overflow. This optional browser test is separate from the dependency-free CI gate; visual screenshots still need human inspection.
 
 ## License
 

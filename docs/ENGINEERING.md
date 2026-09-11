@@ -75,7 +75,7 @@ R0/R1 can record this in the task or operation entry. R2/R3 use [`templates/CHAN
 ### Rendering and export
 
 - A renderer must respond meaningfully to shared parameters and must not rely on network state or the wall clock for its initial frame.
-- Preview resolution may be reduced for performance; exported dimensions must match the selected preset exactly.
+- Preview resolution may be reduced for performance. PNG dimensions must match the selected preset exactly; v0.1 WebM records preview resolution and must disclose its actual dimensions in the output UI. Never silently label a reduced export as full-resolution.
 - PNG and recipe exports fail visibly. Video capability is feature-detected and must not block still-image creation.
 - New effects need a performance ceiling on a representative laptop and a safe reduction strategy for constrained viewports.
 

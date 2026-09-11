@@ -392,6 +392,7 @@ function updateCanvasPreset() {
   canvas.height = preview.height;
   document.querySelector("#canvas-size-label").textContent = `${preset.width} × ${preset.height}`;
   document.querySelector("#export-size").textContent = `${preset.width} × ${preset.height}`;
+  document.querySelector("#video-size").textContent = `WebM · ${preview.width} × ${preview.height} preview · ~5s`;
   document.querySelector(".preset-summary span").textContent = preset.label;
   document.querySelector(".preset-summary strong").textContent = `${preset.width} × ${preset.height}`;
   document.querySelector(".preset-summary small").textContent = preset.note;
@@ -676,10 +677,19 @@ document.querySelector("#record-video").addEventListener("click", () => {
   const button = document.querySelector("#record-video");
   const badge = document.querySelector("#recording-badge");
   const mimeCandidates = ["video/webm;codecs=vp9", "video/webm;codecs=vp8", "video/webm"];
-  const mimeType = mimeCandidates.find((type) => !MediaRecorder.isTypeSupported || MediaRecorder.isTypeSupported(type)) || "";
-  const stream = canvas.captureStream(30);
+  const mimeType = mimeCandidates.find((type) => MediaRecorder.isTypeSupported?.(type));
+  if (!mimeType) return showToast("WebM is not supported here. Export PNG or JSON instead.");
+  let stream;
+  let recorder;
+  try {
+    stream = canvas.captureStream(30);
+    recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 9000000 });
+  } catch {
+    stream?.getTracks().forEach((track) => track.stop());
+    return showToast("Recording could not start. Export PNG or JSON instead.");
+  }
   const chunks = [];
-  const recorder = new MediaRecorder(stream, mimeType ? { mimeType, videoBitsPerSecond: 9000000 } : undefined);
+  const filename = `gen4zero-${state.pattern}-${state.seed}-5s.webm`;
   const wasPlaying = state.playing;
   state.playing = true;
   button.disabled = true;
@@ -687,18 +697,37 @@ document.querySelector("#record-video").addEventListener("click", () => {
   let remaining = 5;
   badge.querySelector("span").textContent = `REC 00:0${remaining}`;
   const countdown = setInterval(() => { remaining -= 1; badge.querySelector("span").textContent = `REC 00:0${Math.max(0, remaining)}`; }, 1000);
-  recorder.addEventListener("dataavailable", (event) => { if (event.data.size) chunks.push(event.data); });
-  recorder.addEventListener("stop", () => {
+  let stopTimer;
+  let failed = false;
+  const restore = () => {
     clearInterval(countdown);
+    clearTimeout(stopTimer);
     badge.hidden = true;
     button.disabled = false;
     state.playing = wasPlaying;
     stream.getTracks().forEach((track) => track.stop());
-    downloadBlob(new Blob(chunks, { type: recorder.mimeType || "video/webm" }), `gen4zero-${state.pattern}-${state.seed}-5s.webm`);
+  };
+  recorder.addEventListener("dataavailable", (event) => { if (event.data.size) chunks.push(event.data); });
+  recorder.addEventListener("error", () => {
+    failed = true;
+    restore();
+    showToast("Recording failed. Export PNG or JSON instead.");
+  });
+  recorder.addEventListener("stop", () => {
+    restore();
+    if (failed) return;
+    if (!chunks.length) return showToast("Recording was empty. Try again or export PNG.");
+    downloadBlob(new Blob(chunks, { type: recorder.mimeType }), filename);
     showToast("5-second clip exported");
   });
-  recorder.start();
-  setTimeout(() => recorder.stop(), 5000);
+  try {
+    recorder.start();
+    stopTimer = setTimeout(() => { if (recorder.state === "recording") recorder.stop(); }, 5000);
+  } catch {
+    failed = true;
+    restore();
+    showToast("Recording could not start. Export PNG or JSON instead.");
+  }
 });
 
 document.querySelector("#save-gallery").addEventListener("click", () => {

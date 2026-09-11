@@ -1,0 +1,35 @@
+name: Bug report
+description: Report a reproducible problem in the instrument or an export.
+title: "[Bug] "
+labels: [bug, needs-triage]
+body:
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Include the system, seed, preset, steps, and a recipe link or privacy-safe JSON when possible.
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and operating system
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Additional evidence
+      description: Do not attach credentials, private browser data, or work you cannot publish.

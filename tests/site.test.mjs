@@ -13,7 +13,9 @@ test("the static entrypoint exposes the complete creation flow", async () => {
     assert.match(html, new RegExp(`id=["']${id}["']`));
   }
   assert.equal((html.match(/data-pattern=/g) || []).length, 6);
-  assert.match(html, /meta property="og:image" content="\.\/og\.png"/);
+  assert.match(html, /meta property="og:image" content="https:\/\/gen4zero\.zzao\.im\/og\.png"/);
+  assert.match(html, /Begin at zero\. Shape what emerges\./);
+  assert.match(html, /github\.com\/hominthesky\/gen4zero\/issues\/new\/choose/);
 });
 
 test("all systems and output presets have implementation entries", async () => {
@@ -25,7 +27,9 @@ test("all systems and output presets have implementation entries", async () => {
     assert.match(source, new RegExp(`\\n\\s*${preset}:\\s*\\{`));
   }
   assert.match(source, /canvas\.captureStream\(30\)/);
-  assert.match(source, /localStorage\.setItem\("z4zero-generative-works"/);
+  assert.match(source, /const STORAGE_KEY = "gen4zero-works-v1"/);
+  assert.match(source, /const LEGACY_STORAGE_KEY = "z4zero-generative-works"/);
+  assert.match(source, /localStorage\.setItem\(STORAGE_KEY/);
 });
 
 test("social preview is the expected 1200 × 630 PNG", async () => {
@@ -39,4 +43,12 @@ test("social preview is the expected 1200 × 630 PNG", async () => {
 test("the site contains no machine-specific absolute paths", async () => {
   const contents = await Promise.all([read("index.html"), read("styles.css"), read("app.js"), read("README.md")]);
   assert.equal(contents.some((value) => value.includes("/Users/")), false);
+});
+
+test("the public identity and custom origin match the brand baseline", async () => {
+  const [html, readme, cname] = await Promise.all([read("index.html"), read("README.md"), read("CNAME")]);
+  assert.match(html, /<span class="brand-name">GEN4ZERO<\/span>/);
+  assert.doesNotMatch(html, /Generative Studio|studio\.zzao\.im/);
+  assert.doesNotMatch(readme, /z4zero-generative-studio|studio\.zzao\.im/);
+  assert.equal(cname.trim(), "gen4zero.zzao.im");
 });

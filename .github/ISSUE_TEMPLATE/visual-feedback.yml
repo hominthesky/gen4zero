@@ -1,0 +1,34 @@
+name: Visual feedback
+description: Share a concrete observation about the interface or generated work.
+title: "[Visual] "
+labels: [visual-feedback, needs-triage]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: What were you making?
+      description: Include the intended use, view, system, seed, preset, or recipe.
+    validations:
+      required: true
+  - type: textarea
+    id: observation
+    attributes:
+      label: What felt strong, unclear, or limiting?
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Is this primarily taste or usability?
+      options:
+        - Usability or comprehension
+        - Visual taste or direction
+        - Both
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Privacy-safe example
+      description: Add a recipe link or image only if you have the right to share it.

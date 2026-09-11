@@ -1,6 +1,8 @@
 # Contributing
 
-Generative Studio is designed to be remixed. Small, legible systems are preferred over opaque effects or large dependencies.
+Gen4Zero is designed to be remixed. Small, legible systems are preferred over opaque effects or large dependencies.
+
+Read [`AGENTS.md`](./AGENTS.md) and [`docs/ENGINEERING.md`](./docs/ENGINEERING.md) before changing product behavior. They define risk levels, compatibility boundaries, human review points, and release evidence.
 
 ## Add a system
 
@@ -20,4 +22,4 @@ Generative Studio is designed to be remixed. Small, legible systems are preferre
 
 ## Before opening a pull request
 
-Run `npm test`, describe the visual behavior you added, and include at least one recipe JSON object that demonstrates it.
+Run `npm run verify:release`, describe the visual behavior you added, and include at least one recipe JSON object that demonstrates it. Changes to renderers, recipe semantics, export behavior, storage, publishing, or the domain also require a Change Record based on [`docs/templates/CHANGE_RECORD.md`](./docs/templates/CHANGE_RECORD.md).

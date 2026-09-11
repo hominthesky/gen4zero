@@ -50,6 +50,8 @@ const defaults = {
 };
 
 const state = { ...defaults, playing: true };
+const STORAGE_KEY = "gen4zero-works-v1";
+const LEGACY_STORAGE_KEY = "z4zero-generative-works";
 let rafId;
 let currentView = "studio";
 let frameCounter = 0;
@@ -556,8 +558,13 @@ function createGalleryCard(work, index, local = false) {
 
 function getLocalWorks() {
   try {
-    const saved = JSON.parse(localStorage.getItem("z4zero-generative-works") || "[]");
-    return Array.isArray(saved) ? saved.map(normalizeRecipe).slice(0, 24) : [];
+    const current = localStorage.getItem(STORAGE_KEY);
+    const legacy = current === null ? localStorage.getItem(LEGACY_STORAGE_KEY) : null;
+    const saved = JSON.parse(current ?? legacy ?? "[]");
+    if (!Array.isArray(saved)) return [];
+    const normalized = saved.map(normalizeRecipe).slice(0, 24);
+    if (current === null && legacy !== null) localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    return normalized;
   } catch {
     return [];
   }
@@ -580,7 +587,7 @@ function renderLocalGallery() {
   document.querySelector("#local-count").textContent = `${works.length} saved`;
   updateGalleryCount(works.length);
   if (!works.length) {
-    grid.innerHTML = '<div class="empty-gallery"><span>Nothing held yet.</span><p>Return to Studio and save a frame you want to revisit.</p></div>';
+    grid.innerHTML = '<div class="empty-gallery"><span>Nothing held yet.</span><p>Return to Create and save a frame you want to revisit.</p></div>';
     return;
   }
   const fragment = document.createDocumentFragment();
@@ -657,7 +664,7 @@ document.querySelector("#export-png").addEventListener("click", () => {
   renderArt(output, state, state.time);
   output.toBlob((blob) => {
     if (!blob) return showToast("Export failed in this browser");
-    downloadBlob(blob, `z4zero-${state.pattern}-${state.seed}-${preset.width}x${preset.height}.png`);
+    downloadBlob(blob, `gen4zero-${state.pattern}-${state.seed}-${preset.width}x${preset.height}.png`);
     showToast("PNG exported");
   }, "image/png");
 });
@@ -685,7 +692,7 @@ document.querySelector("#record-video").addEventListener("click", () => {
     button.disabled = false;
     state.playing = wasPlaying;
     stream.getTracks().forEach((track) => track.stop());
-    downloadBlob(new Blob(chunks, { type: recorder.mimeType || "video/webm" }), `z4zero-${state.pattern}-${state.seed}-5s.webm`);
+    downloadBlob(new Blob(chunks, { type: recorder.mimeType || "video/webm" }), `gen4zero-${state.pattern}-${state.seed}-5s.webm`);
     showToast("5-second clip exported");
   });
   recorder.start();
@@ -695,7 +702,7 @@ document.querySelector("#record-video").addEventListener("click", () => {
 document.querySelector("#save-gallery").addEventListener("click", () => {
   const works = getLocalWorks();
   works.unshift(recipeFromState());
-  localStorage.setItem("z4zero-generative-works", JSON.stringify(works.slice(0, 24)));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(works.slice(0, 24)));
   updateGalleryCount(Math.min(24, works.length));
   showToast("Saved on this device");
 });
@@ -719,7 +726,7 @@ document.querySelector("#copy-link").addEventListener("click", async () => {
 
 document.querySelector("#export-recipe").addEventListener("click", () => {
   const blob = new Blob([JSON.stringify(recipeFromState(), null, 2)], { type: "application/json" });
-  downloadBlob(blob, `z4zero-${state.pattern}-${state.seed}.z4z.json`);
+  downloadBlob(blob, `gen4zero-${state.pattern}-${state.seed}.g4z.json`);
   showToast("Recipe exported");
 });
 

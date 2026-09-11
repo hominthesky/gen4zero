@@ -1,0 +1,31 @@
+name: Generative system proposal
+description: Propose a deterministic visual system or meaningful extension.
+title: "[System] "
+labels: [system-proposal, needs-triage]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Generative idea
+      description: Explain the rule or relationship, not only the desired appearance.
+    validations:
+      required: true
+  - type: textarea
+    id: parameters
+    attributes:
+      label: Parameter behavior
+      description: How should density, complexity, motion, continuity, scale, weight, and grain affect it?
+    validations:
+      required: true
+  - type: textarea
+    id: determinism
+    attributes:
+      label: Determinism and performance
+      description: Explain how a seed reproduces it and any browser/GPU cost or fallback.
+    validations:
+      required: true
+  - type: textarea
+    id: reference
+    attributes:
+      label: Originality and references
+      description: Credit inspirations and clarify what can legally be reused.

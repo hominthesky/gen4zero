@@ -4,32 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0c0c0b" />
-    <meta name="description" content="Z4Zero Generative Studio — 在浏览器里调制、预览、保存与导出生成式视觉。" />
-    <meta property="og:title" content="Z4Zero / Generative Studio" />
-    <meta property="og:description" content="Make living visual systems." />
+    <meta name="description" content="Gen4Zero — 从 seed 到 form，在浏览器中塑造、复现并导出生成式视觉系统。" />
+    <meta property="og:title" content="Gen4Zero" />
+    <meta property="og:description" content="Begin at zero. Shape what emerges." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="./og.png" />
+    <meta property="og:url" content="https://gen4zero.zzao.im/" />
+    <meta property="og:image" content="https://gen4zero.zzao.im/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Z4Zero / Generative Studio" />
-    <meta name="twitter:description" content="Make living visual systems." />
-    <meta name="twitter:image" content="./og.png" />
-    <title>Z4Zero / Generative Studio</title>
+    <meta name="twitter:title" content="Gen4Zero" />
+    <meta name="twitter:description" content="Begin at zero. Shape what emerges." />
+    <meta name="twitter:image" content="https://gen4zero.zzao.im/og.png" />
+    <title>Gen4Zero — A generative instrument by Z4Zero</title>
+    <link rel="canonical" href="https://gen4zero.zzao.im/" />
     <link rel="stylesheet" href="./styles.css" />
     <script src="./app.js" defer></script>
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <a class="brand" href="#studio" aria-label="Z4Zero Generative Studio home">
-          <span class="brand-mark" aria-hidden="true">Z<span>4</span></span>
-          <span class="brand-name">Generative Studio</span>
+        <a class="brand" href="#studio" aria-label="Gen4Zero home">
+          <span class="brand-mark" aria-hidden="true">Z<span>40</span></span>
+          <span class="brand-name">GEN4ZERO</span>
         </a>
         <nav class="view-nav" aria-label="Primary navigation">
-          <button class="nav-item is-active" type="button" data-view="studio">Studio</button>
+          <button class="nav-item is-active" type="button" data-view="studio">Create</button>
           <button class="nav-item" type="button" data-view="gallery">Gallery <sup id="gallery-count">08</sup></button>
         </nav>
         <div class="topbar-actions">
           <span class="system-status"><i></i> Browser-native</span>
+          <a class="feedback-link" href="https://github.com/hominthesky/gen4zero/issues/new/choose" target="_blank" rel="noreferrer">Feedback</a>
           <button class="icon-button" type="button" id="about-open" aria-label="Open about panel" title="About">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 10.7v6M12 7.3v.2"></path></svg>
           </button>
@@ -124,27 +127,28 @@
 
           <section class="panel-section philosophy-section">
             <p>每个结果都来自一套可复现的规则，而不是一张不可解释的图片。</p>
-            <span>Z4Zero / notes, objects &amp; experiments</span>
+            <span>Begin at zero. Shape what emerges.</span>
           </section>
         </aside>
       </main>
 
       <main class="gallery-view" id="gallery-view" hidden>
-        <header class="gallery-header"><span class="eyebrow">Curated outputs / 2026</span><h1>Selected systems,<br />held at one moment.</h1><p>算法提供可能性，选择把它变成作品。公开策展与只存在于这台设备上的个人收藏，被刻意分开。</p></header>
+        <header class="gallery-header"><span class="eyebrow">Curated outputs / 2026</span><h1>Systems emerge.<br />Moments remain.</h1><p>算法提供可能性，选择把它变成作品。公开策展与只存在于这台设备上的个人收藏，被刻意分开。</p></header>
         <section class="gallery-section" aria-labelledby="curated-title"><div class="gallery-section-heading"><h2 id="curated-title">Curated selection</h2><span>08 works</span></div><div class="gallery-grid" id="curated-grid"></div></section>
-        <section class="gallery-section local-gallery-section" aria-labelledby="local-title"><div class="gallery-section-heading"><h2 id="local-title">My device</h2><span id="local-count">0 saved</span></div><div class="gallery-grid" id="local-grid"><div class="empty-gallery"><span>Nothing held yet.</span><p>Return to Studio and save a frame you want to revisit.</p></div></div></section>
+        <section class="gallery-section local-gallery-section" aria-labelledby="local-title"><div class="gallery-section-heading"><h2 id="local-title">My device</h2><span id="local-count">0 saved</span></div><div class="gallery-grid" id="local-grid"><div class="empty-gallery"><span>Nothing held yet.</span><p>Return to Create and save a frame you want to revisit.</p></div></div></section>
       </main>
     </div>
 
     <dialog class="about-dialog" id="about-dialog">
       <button class="dialog-close" type="button" id="about-close" aria-label="Close about panel">×</button>
-      <span class="eyebrow">About this instrument</span><h2>Make systems.<br />Then make choices.</h2>
-      <p>Generative Studio 是 Z4Zero 的浏览器原生创作工具。它把流场、参数曲线、拓扑、递归网格、干涉纹与粒子轨迹变成可控制、可组合、可复现的视觉系统。</p>
+      <span class="eyebrow">A generative instrument by Z4Zero</span><h2>Begin at zero.<br />Shape what emerges.</h2>
+      <p>Gen4Zero 是 Z4Zero 的浏览器原生生成式视觉工具。它把流场、参数曲线、拓扑、递归网格、干涉纹与粒子轨迹变成可控制、可组合、可复现的视觉系统。</p>
       <p>相同的 seed 与参数会回到相同的起点。PNG、短视频、配方文件都在你的浏览器里生成；作品不会上传到服务器。</p>
+      <a class="dialog-link" href="https://github.com/hominthesky/gen4zero" target="_blank" rel="noreferrer">Source, feedback &amp; remixes ↗</a>
       <div class="dialog-note"><span>Privacy</span><strong>Local-first. No account. No upload.</strong></div>
     </dialog>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <noscript>This studio needs JavaScript to render generative artwork.</noscript>
+    <noscript>Gen4Zero needs JavaScript to render generative artwork.</noscript>
   </body>
 </html>

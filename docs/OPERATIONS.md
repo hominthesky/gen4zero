@@ -2,6 +2,17 @@
 
 This is the chronological evidence trail. It records what actually happened; product and engineering rules remain in their authoritative documents.
 
+## 2026-09-12｜Canonical domain cutover
+
+- **Risk and authority:** R3, within the owner's explicit publication request and continued domain setup.
+- **Plan:** Bind `gen4zero.zzao.im` to the existing Pages site, then add one Name.com CNAME at TTL 300. Preserve the seven observed existing DNS records and the published artifact.
+- **Preflight:** Authenticated classic DNS management is available. The newer domain-details page failed to load scripts; no credentials or security settings were changed to work around it. No existing `gen4zero` record was observed.
+- **Record:** [CR-20260912-01](./change-records/CR-20260912-01-custom-domain.md).
+- **Applied:** Pages confirmed the custom hostname, then Name.com visibly confirmed the one new CNAME at TTL 300 with the other seven records unchanged.
+- **State:** DNS and Pages configured; new-hostname certificate and live verification pending. GitHub reset HTTPS enforcement during hostname provisioning; no explicit weakening command or TLS bypass was used.
+- **DNS acceptance:** The authoritative server and Cloudflare resolver returned the correct CNAME. GitHub's health check later confirmed valid DNS, Pages service, and HTTPS eligibility without a CAA error. A first HTTPS probe correctly rejected the still-unmatched certificate; certificate provisioning remains a separate gate.
+- **Handoff:** A second TLS probe still rejected the old certificate. No more HTTPS probes until certificate state changes; no TLS bypass. Re-saved the identical custom hostname once after valid DNS recognition, without removing its binding. Local release checks passed (11 tests). Remaining: certificate, HTTPS enforcement, live origin/browser checks, then final documentation approval. No scheduled follow-up is implied unless the owner separately requests it.
+
 ## 2026-09-11｜Gen4Zero brand and first public release
 
 - **Reason:** Establish the first Z4Zero product as a reusable browser-native generative instrument and publish it at a durable product origin.

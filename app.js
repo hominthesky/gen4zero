@@ -472,18 +472,18 @@ function recipeFromState() {
 function normalizeRecipe(value) {
   const recipe = { ...defaults };
   if (!value || typeof value !== "object") return recipe;
-  if (patterns[value.pattern]) recipe.pattern = value.pattern;
-  if (palettes[value.palette]) recipe.palette = value.palette;
-  if (presets[value.preset]) recipe.preset = value.preset;
-  if (patterns[value.layerPattern]) recipe.layerPattern = value.layerPattern;
+  if (Object.hasOwn(patterns, value.pattern)) recipe.pattern = value.pattern;
+  if (Object.hasOwn(palettes, value.palette)) recipe.palette = value.palette;
+  if (Object.hasOwn(presets, value.preset)) recipe.preset = value.preset;
+  if (Object.hasOwn(patterns, value.layerPattern)) recipe.layerPattern = value.layerPattern;
   if (["screen", "source-over", "multiply", "difference", "overlay"].includes(value.blendMode)) recipe.blendMode = value.blendMode;
-  recipe.layerEnabled = Boolean(value.layerEnabled);
+  recipe.layerEnabled = value.layerEnabled === true;
   const numericRules = {
     seed: [1, 999999999], density: [20, 120], complexity: [0, 1], motion: [0, 1], continuity: [0.12, 1],
     scale: [0.2, 1], weight: [0.4, 3], grain: [0, 0.55], layerOpacity: [0.05, 0.9], time: [0, 10000],
   };
   Object.entries(numericRules).forEach(([key, [min, max]]) => {
-    if (Number.isFinite(Number(value[key]))) recipe[key] = Math.min(max, Math.max(min, Number(value[key])));
+    if ((typeof value[key] === "number" || (typeof value[key] === "string" && value[key].trim() !== "")) && Number.isFinite(Number(value[key]))) recipe[key] = Math.min(max, Math.max(min, Number(value[key])));
   });
   recipe.seed = Math.round(recipe.seed);
   recipe.density = Math.round(recipe.density);
@@ -563,7 +563,9 @@ function getLocalWorks() {
     const saved = JSON.parse(current ?? legacy ?? "[]");
     if (!Array.isArray(saved)) return [];
     const normalized = saved.map(normalizeRecipe).slice(0, 24);
-    if (current === null && legacy !== null) localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    if (current === null && legacy !== null) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized)); } catch { /* Keep legacy works readable if storage is full. */ }
+    }
     return normalized;
   } catch {
     return [];
@@ -702,7 +704,11 @@ document.querySelector("#record-video").addEventListener("click", () => {
 document.querySelector("#save-gallery").addEventListener("click", () => {
   const works = getLocalWorks();
   works.unshift(recipeFromState());
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(works.slice(0, 24)));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(works.slice(0, 24)));
+  } catch {
+    return showToast("Device storage unavailable. Export JSON to keep this recipe.");
+  }
   updateGalleryCount(Math.min(24, works.length));
   showToast("Saved on this device");
 });

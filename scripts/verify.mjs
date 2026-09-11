@@ -78,7 +78,9 @@ function changedFiles() {
   gitPaths(["ls-files", "--others", "--exclude-standard", "-z"]).forEach((file) => candidates.add(file));
 
   const configuredBase = process.env.VERIFY_BASE_SHA;
-  const baseIsUsable = configuredBase && !/^0+$/.test(configuredBase) && spawnSync("git", ["cat-file", "-e", `${configuredBase}^{commit}`], { cwd: root }).status === 0;
+  const hasConfiguredBase = configuredBase && !/^0+$/.test(configuredBase);
+  const baseIsUsable = hasConfiguredBase && spawnSync("git", ["cat-file", "-e", `${configuredBase}^{commit}`], { cwd: root }).status === 0;
+  assert.ok(!hasConfiguredBase || baseIsUsable, "configured verification base is missing; fetch history instead of skipping change policy");
   const base = baseIsUsable ? configuredBase : (spawnSync("git", ["cat-file", "-e", "HEAD^"], { cwd: root }).status === 0 ? "HEAD^" : null);
   if (base) gitPaths(["diff", "--name-only", "-z", `${base}...HEAD`]).forEach((file) => candidates.add(file));
   return [...candidates];
@@ -90,7 +92,7 @@ function verifyChangePolicy() {
   if (!meaningful.length) return;
 
   assert.ok(changed.includes("docs/OPERATIONS.md"), "meaningful changes must update docs/OPERATIONS.md");
-  const governed = meaningful.some((file) => /^(?:app\.js|CNAME|\.github\/workflows\/|scripts\/build\.mjs|styles\.css|index\.html)$/.test(file));
+  const governed = meaningful.some((file) => /^(?:app\.js|CNAME|scripts\/[^/]+\.mjs|\.github\/workflows\/[^/]+\.yml)$/.test(file));
   if (governed) {
     assert.ok(changed.some((file) => /^docs\/change-records\/[^/]+\.md$/.test(file)), "governed product or release changes require a Change Record");
   }
@@ -107,7 +109,9 @@ async function verifyReleaseArtifact() {
 }
 
 run(process.execPath, ["--check", "app.js"]);
-run(process.execPath, ["--test", "tests/site.test.mjs"]);
+const tests = (await readdir(join(root, "tests"))).filter((name) => name.endsWith(".test.mjs")).sort();
+assert.ok(tests.length > 0, "at least one test suite is required");
+run(process.execPath, ["--test", ...tests.map((name) => `tests/${name}`)]);
 await verifyStaticContract();
 await verifyDocs();
 await verifySecrets();

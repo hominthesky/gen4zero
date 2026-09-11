@@ -41,7 +41,9 @@ Evidence:
 - Social card is a visually inspected 1200 × 630 PNG with exact title, tagline, and descriptor.
 - The local browser preview loads without console warnings or errors. System selection, seed input, Layer B, TikTok preset, safe zone, and pause/play were exercised successfully in the responsive interface.
 - PNG/WebM and complete Gallery persistence remain release/live checks; their underlying rendering behavior was not changed beyond public filenames and the non-destructive storage-key migration.
-- The public repository, Pages deployment, custom HTTPS origin, metadata, assets, and feedback links resolve.
+- Pending: public repository, Pages deployment, custom HTTPS origin, metadata, assets, and feedback links.
+
+Pre-publication review found gaps in the original gate. The workflow now fetches history, isolates PR concurrency from production, grants write permissions only to deployment, and publishes the artifact that verification produced. Behavioral tests execute all six renderers and exercise bounded recipe normalization and non-destructive storage migration. Prototype-property enum names are excluded, false-like strings cannot enable layers, and storage quota failure retains access to legacy works.
 
 Results will be updated only after execution.
 

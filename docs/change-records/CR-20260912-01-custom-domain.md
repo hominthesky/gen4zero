@@ -1,0 +1,19 @@
+# CR-20260912-01｜Canonical domain cutover
+
+- **Risk:** R3, scoped DNS and Pages custom-domain configuration.
+- **Approval:** The owner requested publication under the Gen4Zero brand, continued the domain setup, and completed Name.com login for this operation.
+- **Outcome:** Serve the existing verified website at `https://gen4zero.zzao.im/`.
+- **Non-goals:** No renderer, recipe, export, storage, permissions, unrelated DNS, hosting-provider, or account changes.
+- **Baseline:** Deployed commit `905452d61b33811b8b3967c667f47470aab6d8de`, identical website files to live-tested `8515242`; Pages has no custom domain and enforces HTTPS at `https://zzao.im/gen4zero/`.
+- **Preflight:** Name.com DNS UI shows no existing `gen4zero` record. Preserve all seven existing records, including apex A records, `www`, the ownership TXT, and `monitor-live`.
+- **Change:** Bind the hostname in the existing GitHub Pages repository, then add only `gen4zero CNAME hominthesky.github.io` with TTL 300.
+- **Acceptance:** Authoritative/public DNS, certificate covers the new hostname, HTTPS 200, source/artifact hashes, recipe/gallery/export browser checks, and unrelated-record preservation.
+- **Storage boundary:** Browser-local Gallery does not move between origins. Old-origin data is not deleted or uploaded by this change.
+- **Stop:** Conflicting records, any need to modify unrelated services or weaken security, or two failures of the same method. Do not bypass TLS errors or approve a deployment as the owner.
+- **Rollback:** If record submission fails after binding, clear only this repository's custom-domain setting to restore the tested project URL. After a record exists, avoid leaving a dangling DNS alias: keep the hostname bound while investigating propagation/certificate delay, or coordinate removal of only the newly added alias before unbinding. Do not change unrelated DNS or disable HTTPS.
+- **Applied:** GitHub Pages now binds `gen4zero.zzao.im`. Name.com confirmed exactly one new CNAME to `hominthesky.github.io`, TTL 300; the seven pre-existing records remained visible and unchanged. The newer details page failed, but the authenticated classic DNS page worked without credential or security changes.
+- **Certificate transition:** GitHub automatically reported `https_enforced: false` and no certificate immediately after the hostname changed. No explicit request to disable HTTPS was made. Enable enforcement when the new certificate is available; never bypass TLS warnings.
+- **DNS evidence:** The authoritative Name.com server and Cloudflare public resolver returned the new CNAME at TTL 300. GitHub's initially cached negative result subsequently changed to `dns_resolves: true`, `is_valid: true`, `is_served_by_pages: true`, and `is_https_eligible: true`, with no CAA error. Google's public DNS endpoint was unreachable from this environment and is not counted as evidence.
+- **State:** Domain and DNS verified; new certificate and live HTTPS verification pending.
+- **Pending handoff:** Once Pages reports a certificate covering the hostname, verify normal TLS, enable `https_enforced: true`, compare live HTML/CSS/JS/social-card bytes with the verified artifact, and exercise Create/Gallery/recipe/export on the custom origin. Update README and this record only after those checks pass. Do not approve any protected deployment on the owner's behalf. A documentation PR can be reviewed without changing the website artifact.
+- **Verification:** The shared release gate passed all 11 tests and the allowlisted build during cutover. Two normal HTTPS probes rejected the unmatched certificate; neither is a successful live check. The same hostname was saved once more after DNS became valid, without deleting a record or changing HTTPS options. No further reconfiguration is planned while certificate provisioning is pending.
